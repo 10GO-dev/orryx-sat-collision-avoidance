@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from skyfield.api import EarthSatellite, load
 
@@ -8,7 +8,7 @@ def simulate_orbit(tle_line1, tle_line2, name, duration_hours=24, interval_minut
     satellite = EarthSatellite(tle_line1, tle_line2, name, ts)
 
     # Step 1: Generate time steps
-    start_time = datetime.utcnow()
+    start_time = datetime.now(timezone.utc)
     steps = int((duration_hours * 60) / interval_minutes)
     times = [start_time + timedelta(minutes=i * interval_minutes) for i in range(steps)]
 

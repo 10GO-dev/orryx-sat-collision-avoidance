@@ -13,6 +13,18 @@ def extract_norad_id(tle_line1: str) -> int:
     return int(tle_line1[2:7].strip())
 
 
+def detect_object_type(name: str) -> str:
+    name_upper = name.upper()
+    if "DEB" in name_upper or "DEBRIS" in name_upper:
+        return "DEBRIS"
+    if "R/B" in name_upper or "ROCKET BODY" in name_upper:
+        return "ROCKET BODY"
+    if "PAYLOAD" in name_upper:
+        return "PAYLOAD"
+    # Puedes agregar más reglas según tus datos
+    return "PAYLOAD"  # Valor por defecto
+
+
 def fetch_and_store_tles():
     db = SessionLocal()
     try:
@@ -39,17 +51,25 @@ def fetch_and_store_tles():
 
                 sat = db.query(Satellite).filter(Satellite.norad_id == norad_id).first()
 
+                object_type = detect_object_type(name)
                 if sat:
                     sat.name = name
                     sat.tle_line1 = tle1
                     sat.tle_line2 = tle2
-                    print(f"🔁 Updating: {name} ({norad_id})")
+                    sat.source = "CelesTrak"
+                    sat.object_type = object_type
+                    print(f"🔁 Updating: {name} ({norad_id}) [{object_type}]")
                 else:
                     sat = Satellite(
-                        norad_id=norad_id, name=name, tle_line1=tle1, tle_line2=tle2
+                        norad_id=norad_id,
+                        name=name,
+                        tle_line1=tle1,
+                        tle_line2=tle2,
+                        source="CelesTrak",
+                        object_type=object_type
                     )
                     db.add(sat)
-                    print(f"🆕 Inserting: {name} ({norad_id})")
+                    print(f"🆕 Inserting: {name} ({norad_id}) [{object_type}]")
 
                 count += 1
             except Exception as e:
