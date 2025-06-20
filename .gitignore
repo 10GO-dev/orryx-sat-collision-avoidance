@@ -14,3 +14,55 @@ venv/
 
 # Mac/Linux
 .DS_Store
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Test and coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+pytest_cache/
+.cache/
+coverage.xml
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDEs
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS
+Thumbs.db
+
+# Yarn
+yarn.lock
+
+# npm
+package-lock.json
+
+# React/Angular/Vue build
+frontend/build/
+frontend/dist/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Misc
+*.bak
+*.swp
+*.swo
+*.orig
+*.tmp
