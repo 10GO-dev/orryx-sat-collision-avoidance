@@ -51,6 +51,27 @@ def get_satellites(
     finally:
         db.close()
 
+@router.get("/satellites/stats", response_model=SatelliteStatsSchema)
+def get_satellite_stats():
+    """Devuelve estadísticas de satélites por tipo de objeto"""
+    db: Session = SessionLocal()
+    try:
+        total = db.query(func.count(Satellite.id)).scalar()
+        by_type = (
+            db.query(Satellite.object_type, func.count(Satellite.id))
+            .group_by(Satellite.object_type)
+            .all()
+        )
+        stats = calculate_satellite_stats(by_type, total)
+        return {
+            "status": "success",
+            "data": stats
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error obteniendo estadísticas: {str(e)}")
+    finally:
+        db.close()
+
 @router.get("/satellites/{norad_id}", response_model=SatelliteDetailSchema)
 def get_satellite(norad_id: int):
     """Obtiene detalles de un satélite específico por NORAD ID e incluye alertas de colisión relacionadas"""
@@ -98,27 +119,6 @@ def get_satellite(norad_id: int):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error obteniendo satélite: {str(e)}")
-    finally:
-        db.close()
-
-@router.get("/satellites/stats", response_model=SatelliteStatsSchema)
-def get_satellite_stats():
-    """Devuelve estadísticas de satélites por tipo de objeto"""
-    db: Session = SessionLocal()
-    try:
-        total = db.query(func.count(Satellite.id)).scalar()
-        by_type = (
-            db.query(Satellite.object_type, func.count(Satellite.id))
-            .group_by(Satellite.object_type)
-            .all()
-        )
-        stats = calculate_satellite_stats(by_type, total)
-        return {
-            "status": "success",
-            "data": stats
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error obteniendo estadísticas: {str(e)}")
     finally:
         db.close()
 

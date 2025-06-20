@@ -37,9 +37,13 @@ class SatelliteDetailSchema(BaseModel):
     status: str
     data: SatelliteSchema
 
+class SatelliteStatsDataSchema(BaseModel):
+    total: int
+    by_type: Dict[str, int]
+
 class SatelliteStatsSchema(BaseModel):
     status: str
-    data: Dict[str, int]
+    data: SatelliteStatsDataSchema
 
 class DebrisStatsSchema(BaseModel):
     status: str
