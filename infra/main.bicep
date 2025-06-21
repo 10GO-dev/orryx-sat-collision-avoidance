@@ -5,6 +5,7 @@ param webappBackendName string = 'orryx-fastapi'
 param webappFrontendName string = 'orryx-nextjs'
 param postgresServerName string = 'orryxpg${uniqueString(resourceGroup().id)}'
 param postgresAdminUser string = 'orryxadmin'
+@secure()
 param postgresAdminPassword string
 
 // Azure Container Registry
@@ -26,8 +27,6 @@ resource postgres 'Microsoft.DBforPostgreSQL/flexibleServers@2023-03-01-preview'
   sku: {
     name: 'B_Standard_B1ms'
     tier: 'Burstable'
-    capacity: 1
-    family: 'B'
   }
   properties: {
     administratorLogin: postgresAdminUser
@@ -42,9 +41,6 @@ resource postgres 'Microsoft.DBforPostgreSQL/flexibleServers@2023-03-01-preview'
     backup: {
       backupRetentionDays: 7
       geoRedundantBackup: 'Disabled'
-    }
-    network: {
-      publicNetworkAccess: 'Enabled'
     }
   }
 }
@@ -96,7 +92,6 @@ resource backendWebApp 'Microsoft.Web/sites@2022-03-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  dependsOn: [acr, appServicePlan, postgres]
 }
 
 // Web App para Next.js frontend
@@ -132,5 +127,5 @@ resource frontendWebApp 'Microsoft.Web/sites@2022-03-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  dependsOn: [acr, appServicePlan, backendWebApp]
+  dependsOn: [backendWebApp]
 }
