@@ -166,14 +166,6 @@ This will:
 
 ---
 
-## 🙋‍♂️ Author
-
-**Shiva Raghav** – [GitHub](https://github.com/shivarag200701) | [LinkedIn](https://www.linkedin.com/in/shiva-raghav/)
-
-> *Passionate about backend systems, space-tech, and AI-powered apps.*
-
----
-
 ## ⭐ Star This Repo
 
 If you find this project valuable or interesting, consider giving it a star!  
