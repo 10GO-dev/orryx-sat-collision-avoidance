@@ -71,7 +71,7 @@ With thousands of satellites in orbit and more being launched every month, the r
     Enables real-time collaboration among satellite operators through an intuitive, serverless dashboard, enhancing decision-making and coordination.
 
 * **✅ Responsible AI & Robust Governance**
-    Applies the **Microsoft Responsible AI Toolkit** (featuring SHAP for explainability and Fairlearn for fairness) to ensure model transparency and trustworthiness. Enforces data privacy with Azure Key Vault**, and maintains comprehensive audit trails.
+    Applies the **Microsoft Responsible AI Toolkit** to ensure model transparency and trustworthiness. Enforces data privacy with **Azure Key Vault**, and maintains comprehensive audit trails.
 
 ---
 
@@ -203,6 +203,8 @@ This will:
 ### **🌐 Learn More**
 
 For more information about Orryx AI, visit our website: [Orryx AI Official Website](https://orryx-ai.space/)
+
+[Video](https://aluautonoma365-my.sharepoint.com/personal/benjamin_ortiz1_cloud_uautonoma_cl/_layouts/15/stream.aspx?id=%2Fpersonal%2Fbenjamin_ortiz1_cloud_uautonoma_cl%2FDocuments%2FPresentaci%C3%B3n%20Orryx%20AI.mp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&ga=1&referrerScenario=AddressBarCopied.view.667c84ae-3cd7-4cf1-b6ff-182bb03a8488)
 
 ---
 
