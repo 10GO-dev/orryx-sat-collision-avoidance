@@ -51,7 +51,8 @@ jobs:
             az deployment group create \
               --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
               --template-file infra/main.bicep \
-              --parameters location=${{ env.AZURE_LOCATION }} postgresAdminPassword=${{ secrets.POSTGRES_ADMIN_PASSWORD }}
+              --parameters location=${{ env.AZURE_LOCATION }} postgresAdminPassword=${{ secrets.POSTGRES_ADMIN_PASSWORD }} \
+              --debug
             az deployment group wait --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --created
 
       - name: Azure CLI - Login to ACR
