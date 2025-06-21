@@ -9,7 +9,18 @@ interface SatelliteStatsProps {
   loading: boolean
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
+// Colores personalizados por tipo
+const TYPE_COLORS: Record<string, string> = {
+  debris: "#FF0000", // rojo
+  payload: "#00C49F", // verde
+  "rocket body": "#FFBB28", // amarillo
+}
+const DEFAULT_COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
+
+function getTypeColor(type: string, index: number) {
+  const key = type.toLowerCase()
+  return TYPE_COLORS[key] || DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+}
 
 export function SatelliteStats({ stats, loading }: SatelliteStatsProps) {
   if (loading) {
@@ -65,7 +76,7 @@ export function SatelliteStats({ stats, loading }: SatelliteStatsProps) {
                   dataKey="value"
                 >
                   {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={getTypeColor(entry.name, index)} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -87,7 +98,7 @@ export function SatelliteStats({ stats, loading }: SatelliteStatsProps) {
                   className="h-2"
                   style={
                     {
-                      "--progress-background": COLORS[index % COLORS.length],
+                      "--progress-background": getTypeColor(type, index),
                     } as React.CSSProperties
                   }
                 />

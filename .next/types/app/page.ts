@@ -1,4 +1,4 @@
-// File: D:\projects\orryx-sat-collision-avoidance\frontend\app\page.tsx
+// File: D:\projects\orryx-sat-collision-avoidance\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

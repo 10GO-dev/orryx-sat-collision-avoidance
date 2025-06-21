@@ -10,31 +10,25 @@ import { SatelliteInfoPanel } from "./satellite-info-panel"
 import { processSatellitesForOrbit } from "../../utils/orbital"
 import type { SatelliteSchema } from "../../types/api"
 
-interface OrbitSceneProps {
+export interface OrbitSceneProps {
   satellites: SatelliteSchema[]
   selectedSatellite: SatelliteSchema | null
   onSatelliteSelect: (satellite: SatelliteSchema | null) => void
-  visibleTypes: string[]
   showOrbits: boolean
   showLabels: boolean
+  speed: number
 }
 
 export function OrbitScene({
   satellites,
   selectedSatellite,
   onSatelliteSelect,
-  visibleTypes,
   showOrbits,
   showLabels,
+  speed,
 }: OrbitSceneProps) {
-  // Filtrar satélites por tipos visibles
-  const filteredSatellites = useMemo(() => {
-    return satellites.filter((sat) => visibleTypes.includes(sat.object_type))
-  }, [satellites, visibleTypes])
-
-  const orbits = useMemo(() => {
-    return processSatellitesForOrbit(filteredSatellites.slice(0, 100)) // Aumentamos el límite
-  }, [filteredSatellites])
+  // Solo renderiza los objetos recibidos por props, sin controles ni filtros internos
+  const orbits = useMemo(() => processSatellitesForOrbit(satellites), [satellites])
 
   const getOrbitColor = (objectType: string) => {
     switch (objectType.toLowerCase()) {
@@ -76,14 +70,19 @@ export function OrbitScene({
 
         {/* Orbits */}
         {showOrbits &&
-          orbits.map((orbit) => (
-            <OrbitPath
-              key={orbit.noradId}
-              points={orbit.points}
-              color={getOrbitColor(orbit.objectType)}
-              opacity={selectedSatellite?.noradId === orbit.noradId ? 1 : 0.4}
-            />
-          ))}
+          orbits.map((orbit) => {
+            const elapsed = performance.now() / 1000
+            const progress = ((elapsed * speed) % 1)
+            return (
+              <OrbitPath
+                key={orbit.noradId}
+                points={orbit.points}
+                color={getOrbitColor(orbit.objectType)}
+                opacity={selectedSatellite?.norad_id === orbit.noradId ? 1 : 0.4}
+                progress={progress}
+              />
+            )
+          })}
 
         {/* Satellites */}
         {orbits.map((orbit) => (
@@ -93,6 +92,7 @@ export function OrbitScene({
             selected={selectedSatellite?.norad_id === orbit.noradId}
             showLabel={showLabels}
             onClick={() => handleSatelliteClick(orbit.noradId)}
+            speed={speed}
           />
         ))}
 
@@ -109,42 +109,6 @@ export function OrbitScene({
 
       {/* Satellite Info Panel */}
       <SatelliteInfoPanel satellite={selectedSatellite} onClose={() => onSatelliteSelect(null)} />
-
-      {/* UI Overlay */}
-      <div className="absolute top-4 left-4 bg-black/70 text-white p-4 rounded-lg max-w-xs">
-        <h3 className="font-bold mb-2">3D Orbit View</h3>
-        <div className="space-y-2 text-sm">
-          <div>Objects: {orbits.length}</div>
-          <div>Selected: {selectedSatellite ? selectedSatellite.name : "None"}</div>
-        </div>
-
-        <div className="mt-4 space-y-1 text-xs">
-          <div className="text-muted-foreground mb-2">Object Types:</div>
-          {visibleTypes.includes("PAYLOAD") && (
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded"></div>
-              <span>Payload</span>
-            </div>
-          )}
-          {visibleTypes.includes("DEBRIS") && (
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded"></div>
-              <span>Debris</span>
-            </div>
-          )}
-          {visibleTypes.includes("ROCKET BODY") && (
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-orange-500 rounded"></div>
-              <span>Rocket Body</span>
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4 text-xs text-muted-foreground">
-          <p>Click on objects to view details</p>
-          <p>Click empty space to deselect</p>
-        </div>
-      </div>
     </div>
   )
 }

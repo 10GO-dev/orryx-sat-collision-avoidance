@@ -35,13 +35,16 @@ def calculate_satellite_stats(by_type, total):
         "by_type": stats
     }
 
-def build_system_summary(total_satellites, total_debris, total_cdm, last_tle_fetch_time):
+def build_system_summary(total_satellites, total_debris, total_cdm, last_tle_fetch_time, total_alerts):
     """
     Construye el resumen general del sistema para el endpoint /summary.
     """
-    return {
+    summary = {
         "total_satellites": total_satellites,
         "total_debris": total_debris,
         "total_cdm": total_cdm,
         "last_tle_fetch_time": last_tle_fetch_time,
+        "collision_alerts": total_alerts
     }
+    print("System Summary:", summary)  # Debugging line to check the summary structure
+    return summary

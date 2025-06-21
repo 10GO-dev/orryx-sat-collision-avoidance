@@ -26,7 +26,9 @@ export function StatsCards({ summary, loading }: StatsCardsProps) {
   }
 
   const data = summary?.data || {}
-
+  if (!data) {
+    return <div className="text-center text-muted-foreground py-8">No data available</div>
+  }
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -57,7 +59,7 @@ export function StatsCards({ summary, loading }: StatsCardsProps) {
           <Trash2 className="h-4 w-4 text-orange-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-orange-600">{data.debris_count || 0}</div>
+          <div className="text-2xl font-bold text-orange-600">{data.total_debris || 0}</div>
           <p className="text-xs text-muted-foreground">Tracked debris objects</p>
         </CardContent>
       </Card>
@@ -68,7 +70,7 @@ export function StatsCards({ summary, loading }: StatsCardsProps) {
           <Activity className="h-4 w-4 text-blue-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-blue-600">{data.cdm_count || 0}</div>
+          <div className="text-2xl font-bold text-blue-600">{data.total_cdm || 0}</div>
           <p className="text-xs text-muted-foreground">Conjunction messages</p>
         </CardContent>
       </Card>

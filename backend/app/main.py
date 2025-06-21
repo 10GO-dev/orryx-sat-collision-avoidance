@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import database, models
-from app.routes import collisions_scan, dashboard, orbit, satellites, summary, cdm, collision_alerts
+from app.routes import collisions_scan, orbit, satellites, summary, cdm, collision_alerts
 from app.tle_fetcher import fetch_and_store_tles
 from app.utils.collision_scheduler import scan_cdm_for_alerts
 
@@ -61,7 +61,6 @@ app.add_middleware(
 # 🔌 Register routers
 app.include_router(orbit.router, prefix="/api")
 app.include_router(collisions_scan.router, prefix="/api")
-app.include_router(dashboard.router, prefix="/api")
 app.include_router(satellites.router, prefix="/api")
 app.include_router(summary.router, prefix="/api")
 app.include_router(cdm.router, prefix="/api")

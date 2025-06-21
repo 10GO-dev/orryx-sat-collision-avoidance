@@ -11,12 +11,6 @@ export function Earth() {
   // Usar texturas básicas para la Tierra
   const earthTexture = useLoader(TextureLoader, "/assets/3d/texture_earth.jpg")
 
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.1 // Rotación lenta
-    }
-  })
-
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
       <sphereGeometry args={[6.371, 64, 32]} />

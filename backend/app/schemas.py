@@ -79,7 +79,7 @@ class CollisionAlertListSchema(BaseModel):
 
 class SummarySchema(BaseModel):
     status: str
-    data: Dict[str, int | str | None]
+    data: Dict[str, int | str | None | datetime]
 
 class MessageSchema(BaseModel):
     message: str

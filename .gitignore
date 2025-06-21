@@ -1,26 +1,41 @@
+# Next.js
+.next/
+out/
+
+# Tailwind
+.tailwind*
+
+# General env files
+.env
+.env.*
+*.env.local
+*.env.development.local
+*.env.production.local
+*.env.test.local
+
+# Node
+node_modules/
+
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+venv/
 *.sqlite3
 *.db
-.env
-venv/
-.env.*
 
-# VSCode
-.vscode/
-
-# Mac/Linux
-.DS_Store
-node_modules/
+# Docker
+*.tar
+*.dockerfile
+Dockerfile*
+.dockerignore
 
 # Logs
 logs/
 *.log
 
-# Test and coverage
+# Test/coverage
 .coverage
 htmlcov/
 .tox/
@@ -29,7 +44,7 @@ pytest_cache/
 .cache/
 coverage.xml
 
-# Jupyter Notebooks
+# Jupyter
 .ipynb_checkpoints
 
 # Build artifacts
@@ -38,31 +53,36 @@ dist/
 *.egg-info/
 .eggs/
 
-# IDEs
+# IDEs/Editors
 .idea/
+.vscode/
 *.sublime-workspace
 *.sublime-project
-
-# OS
+.DS_Store
 Thumbs.db
 
-# Yarn
-yarn.lock
-
-# npm
+# Package managers
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# React/Angular/Vue build
+# React/Angular/Vue (legacy)
 frontend/build/
 frontend/dist/
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
+
+# Azure
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
 
 # Misc
-*.bak
 *.swp
-*.swo
-*.orig
-*.tmp
+*.bak
+
+# Ignore local database and secrets
+satellites.db
+uv.lock
+
+# Ignore output from Azure CLI
+azuredeploy.*.json

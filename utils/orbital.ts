@@ -25,21 +25,40 @@ function eciToThreeJS(eciCoords: satellite.EciVec3<number>, scale = 0.001): [num
 }
 
 // Calcula la órbita completa de un satélite
-export function calculateOrbit(tleLine1: string, tleLine2: string, steps = 100): OrbitPoint[] {
+export function calculateOrbit(tleLine1: string, tleLine2: string, steps = 300): OrbitPoint[] {
   try {
     const satrec = satellite.twoline2satrec(tleLine1, tleLine2)
     const points: OrbitPoint[] = []
 
-    // Calcular puntos de órbita para las próximas 24 horas
+    // Calcular periodo real usando meanMotion
+    const meanMotion = satrec.no * (60 * 24) / (2 * Math.PI) // revs/día
+    const periodMinutes = 1440 / meanMotion // minutos
+    const periodMs = periodMinutes * 60 * 1000
+
+    // Calcular semieje mayor real (a) en km
+    const mu = 398600.4418 // km^3/s^2
+    const n = satrec.no // rad/min
+    const a = Math.pow(mu / (n * n), 1 / 3) // km
+    // Escala: radio de la Tierra en Three.js debe ser 6.371
+    const scale = 6.371 / 6371 // 6371 km = radio real Tierra
+    // Pero los puntos deben estar en la escala de a respecto a la Tierra
+    // Así que ajustamos la escala para que a km -> a * scale en la escena
+
     const now = new Date()
-    const period = 90 * 60 * 1000 // Aproximadamente 90 minutos en ms
-
     for (let i = 0; i < steps; i++) {
-      const time = new Date(now.getTime() + (i * period * 24) / steps)
+      const time = new Date(now.getTime() + (i * periodMs) / steps)
       const positionAndVelocity = satellite.propagate(satrec, time)
-
-      if (positionAndVelocity.position && typeof positionAndVelocity.position !== "boolean") {
-        const [x, y, z] = eciToThreeJS(positionAndVelocity.position)
+      if (
+        positionAndVelocity &&
+        positionAndVelocity.position &&
+        typeof positionAndVelocity.position !== "boolean"
+      ) {
+        // Escala usando el radio real de la Tierra
+        const [x, y, z] = [
+          positionAndVelocity.position.x * scale,
+          positionAndVelocity.position.z * scale,
+          -positionAndVelocity.position.y * scale,
+        ]
         points.push({
           x,
           y,
@@ -62,8 +81,11 @@ export function getCurrentPosition(tleLine1: string, tleLine2: string): OrbitPoi
     const satrec = satellite.twoline2satrec(tleLine1, tleLine2)
     const now = new Date()
     const positionAndVelocity = satellite.propagate(satrec, now)
-
-    if (positionAndVelocity.position && typeof positionAndVelocity.position !== "boolean") {
+    if (
+      positionAndVelocity &&
+      positionAndVelocity.position &&
+      typeof positionAndVelocity.position !== "boolean"
+    ) {
       const [x, y, z] = eciToThreeJS(positionAndVelocity.position)
       return {
         x,
@@ -72,7 +94,6 @@ export function getCurrentPosition(tleLine1: string, tleLine2: string): OrbitPoi
         timestamp: now.getTime(),
       }
     }
-
     return null
   } catch (error) {
     console.error("Error calculating current position:", error)
@@ -102,21 +123,20 @@ export function processSatellitesForOrbit(satellites: any[]): SatelliteOrbit[] {
 export function getOrbitalInfo(tleLine1: string, tleLine2: string) {
   try {
     const satrec = satellite.twoline2satrec(tleLine1, tleLine2)
+    // Parámetros orbitales calculados por satellite.js
+    const inclination = satrec.inclo * (180 / Math.PI) // radianes a grados
+    const raan = satrec.nodeo * (180 / Math.PI)
+    const eccentricity = satrec.ecco
+    const argOfPerigee = satrec.argpo * (180 / Math.PI)
+    const meanAnomaly = satrec.mo * (180 / Math.PI)
+    const meanMotion = satrec.no * (60 * 24) / (2 * Math.PI) // revs/día
 
-    // Extraer información orbital de las líneas TLE
-    const inclination = Number.parseFloat(tleLine2.substring(8, 16))
-    const raan = Number.parseFloat(tleLine2.substring(17, 25)) // Right Ascension of Ascending Node
-    const eccentricity = Number.parseFloat("0." + tleLine2.substring(26, 33))
-    const argOfPerigee = Number.parseFloat(tleLine2.substring(34, 42))
-    const meanAnomaly = Number.parseFloat(tleLine2.substring(43, 51))
-    const meanMotion = Number.parseFloat(tleLine2.substring(52, 63))
-
-    // Calcular período orbital
-    const period = 1440 / meanMotion // en minutos
-
-    // Calcular altitud aproximada (fórmula simplificada)
-    const semiMajorAxis = Math.pow((1440 / (meanMotion * 2 * Math.PI)) * Math.sqrt(398600.4418), 2 / 3)
-    const altitude = semiMajorAxis - 6371 // km sobre la superficie
+    // Constantes
+    const mu = 398600.4418 // km^3/s^2, constante gravitacional estándar de la Tierra
+    const n = satrec.no // rad/min
+    const a = Math.pow(mu / (n * n * (Math.PI / 180) * (Math.PI / 180)), 1 / 3) // km
+    const period = (2 * Math.PI) / (n * (Math.PI / 180)) / 60 // minutos
+    const altitude = a - 6371 // km sobre la superficie
 
     return {
       inclination: inclination.toFixed(2),

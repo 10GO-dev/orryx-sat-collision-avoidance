@@ -24,6 +24,8 @@ export function OrbitVisualization({ satellites, loading }: OrbitVisualizationPr
   const [showOrbits, setShowOrbits] = useState(true)
   const [showLabels, setShowLabels] = useState(false)
   const [visibleTypes, setVisibleTypes] = useState<string[]>(OBJECT_TYPES)
+  const [speed, setSpeed] = useState(0.003)
+  const [maxVisible, setMaxVisible] = useState(200)
 
   // Obtener tipos de objetos únicos de los datos
   const availableTypes = useMemo(() => {
@@ -114,12 +116,15 @@ export function OrbitVisualization({ satellites, loading }: OrbitVisualizationPr
                 <h4 className="font-semibold text-sm">Display Options</h4>
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm">
-                    <Checkbox checked={showOrbits} onCheckedChange={setShowOrbits} />
+                    <Checkbox checked={showOrbits} onCheckedChange={checked => setShowOrbits(checked === true)} />
                     Show Orbit Paths
                   </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <Checkbox checked={showLabels} onCheckedChange={setShowLabels} />
+                  <label className="flex items-center gap-2 text-sm font-semibold text-primary">
+                    <Checkbox checked={showLabels} onCheckedChange={checked => setShowLabels(checked === true)} />
                     Show All Labels
+                    <span className="ml-1 text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                      {showLabels ? `${filteredSatellites.slice(0, maxVisible).length}` : "0"}
+                    </span>
                   </label>
                 </div>
               </div>
@@ -153,6 +158,39 @@ export function OrbitVisualization({ satellites, loading }: OrbitVisualizationPr
                       <span className="text-xs text-muted-foreground">{count}</span>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Velocidad y cantidad de objetos */}
+              <div className="space-y-3 pt-2 border-t">
+                <h4 className="font-semibold text-sm">Visualization Controls</h4>
+                <div className="flex flex-col items-center">
+                  <label htmlFor="speed-slider" className="mb-1 text-xs">Satellite Speed</label>
+                  <input
+                    id="speed-slider"
+                    type="range"
+                    min={0.0005}
+                    max={0.02}
+                    step={0.0005}
+                    value={speed}
+                    onChange={e => setSpeed(Number(e.target.value))}
+                    style={{ width: 120 }}
+                  />
+                  <span className="text-xs mt-1">{speed.toFixed(4)}</span>
+                </div>
+                <div className="flex flex-col items-center mt-2">
+                  <label htmlFor="max-visible-slider" className="mb-1 text-xs">Max Visible Objects</label>
+                  <input
+                    id="max-visible-slider"
+                    type="range"
+                    min={10}
+                    max={filteredSatellites.length}
+                    step={1}
+                    value={maxVisible}
+                    onChange={e => setMaxVisible(Number(e.target.value))}
+                    style={{ width: 120 }}
+                  />
+                  <span className="text-xs mt-1">{maxVisible} / {filteredSatellites.length}</span>
                 </div>
               </div>
 
@@ -193,36 +231,16 @@ export function OrbitVisualization({ satellites, loading }: OrbitVisualizationPr
         </div>
       )}
 
-      {/* 3D Visualization */}
-      <div className={showSidebar ? "col-span-9" : "col-span-12"}>
-        <Card className="h-full">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center justify-between">
-              <span>3D Orbital Visualization</span>
-              <div className="flex gap-2">
-                {!showSidebar && (
-                  <Button variant="outline" size="sm" onClick={() => setShowSidebar(true)}>
-                    <Eye className="h-4 w-4 mr-1" />
-                    Show Controls
-                  </Button>
-                )}
-                <Badge variant="outline">
-                  {filteredSatellites.length} / {satellites.length} Objects
-                </Badge>
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0 h-[calc(100%-80px)]">
-            <OrbitScene
-              satellites={satellites}
-              selectedSatellite={selectedSatellite}
-              onSatelliteSelect={setSelectedSatellite}
-              visibleTypes={visibleTypes}
-              showOrbits={showOrbits}
-              showLabels={showLabels}
-            />
-          </CardContent>
-        </Card>
+      {/* Visualizador 3D */}
+      <div className={`col-span-${showSidebar ? 9 : 12} h-full`}>
+        <OrbitScene
+          satellites={filteredSatellites.slice(0, maxVisible)}
+          selectedSatellite={selectedSatellite}
+          onSatelliteSelect={setSelectedSatellite}
+          showOrbits={showOrbits}
+          showLabels={showLabels}
+          speed={speed}
+        />
       </div>
     </div>
   )
