@@ -27,7 +27,7 @@ venv/
 
 # Docker
 *.tar
-.dockerignore
+
 
 # Logs
 logs/
@@ -62,7 +62,6 @@ Thumbs.db
 # Package managers
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
 
 # React/Angular/Vue (legacy)
 frontend/build/
