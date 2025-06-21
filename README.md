@@ -1,4 +1,4 @@
-# 🛰️ Satellite Collision Predictor
+# 🛰️ Orryx AI: Clarity in Every Orbit, powering Safer Space.
 
 A full-stack application that predicts potential **satellite collisions** by fetching live orbital data (TLEs), simulating future orbits using orbital mechanics, and detecting near-miss events. This project uses modern tools like **FastAPI**, **Skyfield**, and soon **CesiumJS** for 3D visualization.
 
@@ -53,6 +53,40 @@ With thousands of satellites in orbit and more being launched every month, the r
 - Stores close approaches in `collision_alerts` table
 - Identifies top 5 closest encounters
 - Background scans run on startup and periodically
+
+---
+
+### **🚀 Core Capabilities**
+
+* **📊 Automated Data Ingestion & Orbital Tracking**
+    Ingests multi-source orbital elements (TLEs) from public sources via **Azure Data Factory** and **Azure Functions**, storing and processing raw data in **Azure Blob Storage** for precise orbital paths and conjunction detection.
+
+* **🔮 Advanced Predictive Analytics & Risk Assessment**
+    Leverages **Azure Machine Learning** with a **hybrid (Physics + ML) model** to accurately predict orbital paths, calculate collision probabilities, and assign critical risk scores for timely alerts.
+
+* **⚙️ AI-Driven Maneuver Recommendation**
+    Utilizes **Reinforcement Learning** within **Azure Machine Learning** to recommend optimal avoidance maneuvers, balancing safety and fuel efficiency. Supports comprehensive **Azure Batch** simulations for validation.
+
+* **🤝 Collaborative Operations & Secure Communication**
+    Enables real-time collaboration among satellite operators through an intuitive, serverless dashboard, enhancing decision-making and coordination.
+
+* **✅ Responsible AI & Robust Governance**
+    Applies the **Microsoft Responsible AI Toolkit** (featuring SHAP for explainability and Fairlearn for fairness) to ensure model transparency and trustworthiness. Enforces data privacy with Azure Key Vault**, and maintains comprehensive audit trails.
+
+---
+
+### **💡 Why it matters**
+
+Satellite collisions generate thousands of debris fragments, threatening critical global services—from emergency response to financial systems. **Orryx AI** ensures **Clarity in Every Orbit, powering Safer Space**, promoting safer space operations, sustainable orbital environments, and scalable integration for mega-constellation networks.
+
+---
+
+### **📈 Key Metrics & Impact**
+
+* **⚡ Performance:** Near real-time risk detection and rapid maneuver planning, ensuring proactive identification of critical conjunctions for timely decision-making.
+* **✨ Innovation:** AI-powered hybrid (Physics + ML) models, Reinforcement Learning for maneuver optimization, and unique integration with CesiumJS for enhanced atmospheric drag calculations.
+* **☁️ Azure Coverage:** Extensive use of **Azure Machine Learning, Azure Functions, Azure Blob Storage, Azure Cosmos DB, Azure Functions, Azure OpenAI., Microsoft Teams**
+* **🔒 Responsible AI:** Robust bias control, model explainability, data drift detection, privacy compliance, and full auditability.
 
 ---
 
@@ -166,11 +200,9 @@ This will:
 
 ---
 
-## 🙋‍♂️ Author
+### **🌐 Learn More**
 
-**Shiva Raghav** – [GitHub](https://github.com/shivarag200701) | [LinkedIn](https://www.linkedin.com/in/shiva-raghav/)
-
-> *Passionate about backend systems, space-tech, and AI-powered apps.*
+For more information about Orryx AI, visit our website: [Orryx AI Official Website](https://orryx-ai.space/)
 
 ---
 
