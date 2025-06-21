@@ -27,8 +27,6 @@ venv/
 
 # Docker
 *.tar
-*.dockerfile
-Dockerfile*
 .dockerignore
 
 # Logs
